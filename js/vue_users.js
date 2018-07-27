@@ -65,12 +65,13 @@ const app = new Vue({
       }).then(function(response) {
         // alert(response.headers.get('Content-Type')); // application/json; charset=utf-8
         // alert(response.status); // 200
+        console.log(response.status)
 
-        return response.json();
+        // return response.json();
       })
       .then(function(db_user) {
         // alert(user.name); // iliakan
-        console.log("done")
+        // console.log("done")
         
         // self.parseData(db_user)
       })

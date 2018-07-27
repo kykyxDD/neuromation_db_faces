@@ -7,33 +7,21 @@
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="./css/main.css">
-		<!-- <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap@next/dist/css/bootstrap.min.css"/> -->
-		<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
-		<style>
-		#app {
-			padding-top: 20px;
-		}
-
-		[v-cloak] { 
-			display: none; 
-		}
-
-		.customBtn {
-			width: 120px;
-		}
-    </style>  
 
 	</head>
 	<body>
-
+	<div class="header"></div>
 	<div id="app" v-cloak>
-    <div v-if="loadInfo"> 
-      Загружается
-    </div>
-    <div v-else> 
-      Готово
-    </div>
-    <div>
+		
+		<div class="d-none">
+			<div v-if="loadInfo"> 
+				Загружается
+			</div>
+			<div v-else> 
+				Готово
+			</div>
+		</div>
+    <div class="list-users">
       <div v-for="(user, index) in viewUser" :key="index" class="item-user">
  
         <div class="cont-image ">
@@ -60,25 +48,31 @@
               <input type="text" :value="user.name" :id="'user_name_'+user.id">
             </div>
           </div>
-        </div>
-        <div v-if="user.edit">
-          <button @click="saveEditUser(index)"><i class="fas fa-check"></i></button>
-          <button @click="isEditUser(index, false)"><i class="fas fa-ban"></i></button>
-        </div>
-        <div v-else v-on:click="isEditUser(index, true)"> 
-          <i class="fas fa-pencil-alt"></i>
-        </div>
+				</div>
+				<div class="btn-edit-user">
+					<div v-if="user.edit">
+						<div class="btn btn-save" @click="saveEditUser(index)"><i class="fas fa-check"></i></div>
+						<div class="btn btn-cancel" @click="isEditUser(index, false)"><i class="fas fa-ban"></i></div>
+					</div>
+					<div class="btn btn-edit" v-else v-on:click="isEditUser(index, true)"> 
+						<i class="fas fa-pencil-alt"></i>
+					</div>
+				</div>
         
       </div>
 		</div>
-		<div class="pagination"> 
-			<div @click="prevList()" v-if="itemPageUser > 0" ><i class="fas fa-angle-left"></i> </div>
-			<div v-if="itemPageUser > 0" class="active" @click="itemList(itemPageUser-1)">{{itemPageUser}}</div>
-			<div class="active">{{itemPageUser+1}}</div>
-			<div class="" v-if="itemPageUser+1 < maxPageUser"  @click="itemList(itemPageUser+1)">{{itemPageUser+2}}</div>
-			<div @click="nextList()"  v-if="itemPageUser+1 < maxPageUser" ><i class="fas fa-angle-right"></i></div>
+		<div class="text-center">
+			<div class="pagination"> 
+				<div @click="prevList()" v-if="itemPageUser > 0" class="pagination-prev"><i class="fas fa-angle-left"></i> </div>
+				<div v-if="itemPageUser > 0" class="pagination-item" @click="itemList(itemPageUser-1)">{{itemPageUser}}</div>
+				<div class="pagination-item active">{{itemPageUser+1}}</div>
+				<div class="pagination-item " v-if="itemPageUser+1 < maxPageUser"  @click="itemList(itemPageUser+1)">{{itemPageUser+2}}</div>
+				<div @click="nextList()" class="pagination-next" v-if="itemPageUser+1 < maxPageUser" ><i class="fas fa-angle-right"></i></div>
+			</div>
 		</div>
-		<button @click="postUpdateUser()">Save</button>
+		<div>
+			<button @click="postUpdateUser()">Save</button>
+		</div>
 		
 
 	</div>
@@ -86,7 +80,6 @@
 	<script src="https://unpkg.com/vue"></script>
 	<script src="https://unpkg.com/vuex"></script>
 	<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
-	<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 	<script src="./js/vue_users.js"></script>
 	</body>
 </html>

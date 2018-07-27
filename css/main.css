@@ -1,5 +1,37 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+}
+
+
+.header {
+  background-color:#064355;
+  width: 100%;
+  height: 107px;
+  background-image: url(./images/logo.svg);
+  background-repeat:no-repeat;
+  background-position: center;
+}
+.list-users {
+  /* display: inline-flex; */
+  margin: 0 auto;
+  padding-top: 20px;
+  text-align: center
+}
+
 .item-user {
-  display: flex
+  display: inline-flex;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  text-align: left;
+  padding: 10px 20px;
 }
 .user-info {
   width: 300px;
@@ -23,4 +55,84 @@
 }
 .cont-image .item-img:first-child {
   width: 100%;
+}
+.pagination {
+  display: inline-flex;
+  margin: 0 auto
+}
+.pagination-prev {
+  margin-left: 5px;
+}
+.pagination-item {
+  margin-left: 5px;
+}
+.pagination-next {
+  margin-left: 5px;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.d-none{
+  display: none;
+}
+.text-center {
+  text-align: center
+}
+
+.btn-edit-user{
+
+}
+.btn-edit-user .btn {
+  width: 25px;
+  height: 25px;
+  color: #fff;
+  border-radius: 3px;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  position: relative;
+}
+.btn-edit-user .btn i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+}
+.btn-edit-user .btn.btn-save {
+  color: #28a745;
+  border: 1px solid #28a745;
+}
+.btn-edit-user .btn.btn-save:hover {
+  color: #fff;
+  background-color: #28a745;
+}
+.btn-edit-user .btn.btn-cancel {
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+.btn-edit-user .btn.btn-cancel:hover {
+  color: #fff;
+  background-color: #dc3545;
+}
+.btn-edit-user .btn.btn-edit {
+  color: #ffc107;
+  border: 1px solid #ffc107;
+}
+.btn-edit-user .btn.btn-edit:hover {
+  color: #fff;
+  background-color: #ffc107;
 }
