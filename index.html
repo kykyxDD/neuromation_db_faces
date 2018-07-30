@@ -5,8 +5,13 @@
 		<title></title>
 		<meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-    <link type="text/css" rel="stylesheet" href="./css/main.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="./css/main.css">
+			
+		<script src="https://unpkg.com/vue"></script>
+		<script src="https://unpkg.com/vuex"></script>
+		<!-- <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script> -->
 
 	</head>
 	<body>
@@ -21,6 +26,15 @@
 				Готово
 			</div>
 		</div>
+		<div class="text-center">
+			<div class="pagination"> 
+				<div @click="prevList()" class="pagination-prev" v-bind:class="{ disabled: itemPageUser == 0 }"><i class="fas fa-angle-left"></i> </div>
+				<div v-if="itemPageUser > 0" class="pagination-item" @click="itemList(itemPageUser-1)">{{itemPageUser}}</div>
+				<div class="pagination-item active">{{itemPageUser+1}}</div>
+				<div class="pagination-item " v-if="itemPageUser+1 < maxPageUser"  @click="itemList(itemPageUser+1)">{{itemPageUser+2}}</div>
+				<div @click="nextList()" class="pagination-next" v-bind:class="{ disabled: itemPageUser+1 == maxPageUser }"><i class="fas fa-angle-right"></i></div>
+			</div>
+		</div>
     <div class="list-users">
       <div v-for="(user, index) in viewUser" :key="index" class="item-user">
  
@@ -30,23 +44,33 @@
           </div>
         </div>
         <div class="user-info">
-          <div>
-            <div>ID:</div>
-            <div v-if="!user.edit">
+          <div class="d-flex pt-2">
+            <div class=" pr-2 text-name">ID:</div>
+            <div class=" text-value">
               {{ user.id }}
             </div>
-            <div v-else>
-              <input type="text" :value="user.id" :id="'user_id_'+user.id">
-            </div>
           </div>
-          <div>
-            <div>Name:</div>
-            <div v-if="!user.edit">
-              {{ user.name }}
-            </div>
-            <div v-else>
-              <input type="text" :value="user.name" :id="'user_name_'+user.id">
-            </div>
+          <div class="d-flex pt-1">
+						<div class="pt-2 pr-2 text-name">Name:</div>
+						<div class="text-value">
+							<div class="pt-2" v-if="!user.edit">
+								{{ user.name }}
+							</div>
+							<div v-else>
+								<input class="input-edit" type="text" :value="user.name" :id="'user_name_'+user.id">
+							</div>
+						</div>
+					</div>
+					<div class="d-flex pt-2" v-if="user.collapse_to_id">
+						<div class="pt-1 pr-2 text-name">Collapse <br> to id:</div>
+						<div class="text-value">
+							<div class="pt-2" v-if="!user.edit">
+								{{ user.collapse_to_id }}
+							</div>
+							<div v-else>
+								<input class="input-edit" type="number" step="1" :value="user.collapse_to_id" :id="'user_collapse_'+user.id">
+							</div>
+						</div>
           </div>
 				</div>
 				<div class="btn-edit-user">
@@ -63,23 +87,17 @@
 		</div>
 		<div class="text-center">
 			<div class="pagination"> 
-				<div @click="prevList()" v-if="itemPageUser > 0" class="pagination-prev"><i class="fas fa-angle-left"></i> </div>
+				<div @click="prevList()" class="pagination-prev" v-bind:class="{ disabled: itemPageUser == 0 }"><i class="fas fa-angle-left"></i> </div>
 				<div v-if="itemPageUser > 0" class="pagination-item" @click="itemList(itemPageUser-1)">{{itemPageUser}}</div>
 				<div class="pagination-item active">{{itemPageUser+1}}</div>
 				<div class="pagination-item " v-if="itemPageUser+1 < maxPageUser"  @click="itemList(itemPageUser+1)">{{itemPageUser+2}}</div>
-				<div @click="nextList()" class="pagination-next" v-if="itemPageUser+1 < maxPageUser" ><i class="fas fa-angle-right"></i></div>
+				<div @click="nextList()" class="pagination-next" v-bind:class="{ disabled: itemPageUser+1 == maxPageUser }"><i class="fas fa-angle-right"></i></div>
 			</div>
-		</div>
-		<div>
-			<button @click="postUpdateUser()">Save</button>
 		</div>
 		
 
 	</div>
-	
-	<script src="https://unpkg.com/vue"></script>
-	<script src="https://unpkg.com/vuex"></script>
-	<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+
 	<script src="./js/vue_users.js"></script>
 	</body>
 </html>

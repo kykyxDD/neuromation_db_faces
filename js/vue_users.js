@@ -1,4 +1,6 @@
-const LINK_DB = "./data/db.json" ;
+const LINK_DB = "http://192.168.2.2:19877/face/list";
+const LINK_POST_EDITED = "http://192.168.2.2:19877/face/set/";
+const LINK_GET_PHOTO = "http://192.168.2.2:9000/";
 
 const app = new Vue({
 	el:'#app',
@@ -19,8 +21,9 @@ const app = new Vue({
 			sell:0,
 			sellStock:null,
       sellError:false,
-      maxLenImg: 4,
-      maxLenUser: 5,
+      lenId: 5,
+      maxLenImg: 3,
+      maxLenUser: 8,
       defaultImg: './images/error.png'
 		}
 	},
@@ -34,56 +37,57 @@ const app = new Vue({
 	},
 	methods:{
     getUsers() {
-      var self = this
+      let self = this
       this.loadInfo = true
+
+      this.loadedResult = true
       console.log(this)
       fetch(this.linkDb)
       .then(function(response) {
-        // alert(response.headers.get('Content-Type')); // application/json; charset=utf-8
-        // alert(response.status); // 200
-
         return response.json();
       })
       .then(function(db_user) {
-        // alert(user.name); // iliakan
-        console.log('user',db_user)
-        
+        self.loadedResult = false
         self.parseData(db_user)
       })
       .catch( function(err) {
+        self.loadedResult = false
         console.error(err)
-      } );
+      });
     },
-    postUsers(data){
-      fetch(this.linkDb,{
+    postEditedUser(user_id, data) {
+      let self = this
+      console.log('postEditedUser', user_id, data )
+      const link = LINK_POST_EDITED + user_id
+      this.loadedResult = true
+      let body = new URLSearchParams(data)
+      
+      fetch(link, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify(data)
+        body: body.toString()
       }).then(function(response) {
-        // alert(response.headers.get('Content-Type')); // application/json; charset=utf-8
-        // alert(response.status); // 200
-        console.log(response.status)
 
-        // return response.json();
+        return response
       })
-      .then(function(db_user) {
+      .then(function(response) {
         // alert(user.name); // iliakan
-        // console.log("done")
-        
-        // self.parseData(db_user)
+        self.loadedResult = false
+        console.log('done',response)
       })
-      .catch( function(err) {
+      .catch(function(err) {
+        self.loadedResult = false
         console.error(err)
-      } );
+      });
     },
     parseData(db_user) {
       let self = this
       this.loadInfo = false
 
-      this.users = db_user.people
+      this.users = db_user.faces
       this.users.forEach(function(user){
         user.img = self.getImage(user.id)
       })
@@ -92,8 +96,7 @@ const app = new Vue({
       this.itemPageUser = pageUser
       this.maxPageUser = Math.ceil(this.users.length/this.maxLenUser)
       this.setViewUser(pageUser)
-      
-      // console.log(this.viewUser)
+
     },
     setViewUser(pageUser) {
       const f = pageUser*this.maxLenUser;
@@ -101,57 +104,73 @@ const app = new Vue({
       this.viewUser = this.users.slice(f, l)
       this.viewUser.forEach(function(user){
         user.edit = false
-        user.old_id = user.id
+      })
+
+      this.$nextTick(function(){
+        console.log('setViewUser nextTick')
       })
     },
     errorImage(e) {
-      // console.log(e)
       e.target.classList.add('error_img')
       e.target.src = this.defaultImg
     },
     getImage(id) {
       let arr = [];
+      const len = this.lenId - (''+id).length
+      const str_id = this.getArray(len) + id
+      arr.push(`${LINK_GET_PHOTO}face_${str_id}.jpg` )
       for(var i = 0; i < this.maxLenImg; i++){
-        arr.push(`${this.linkFolder+id}/${i+1}.jpg` )
+        const str_id_photo = this.getArray(this.lenId - (''+i).length)+ (i+1)
+        arr.push(`${LINK_GET_PHOTO}face_${str_id}__${str_id_photo}.jpg` )
       }
-      // console.log(arr)
       return arr
+    },
+    getArray(len) {
+      let arr = [];
+      for(let i = 0; i < len; i++){
+        arr.push(0)
+      }
+      return arr.join('')
     },
     saveGlobalUser(update_user) {
       this.users.forEach(function(user){
         if(user.id == update_user.old_id){
-          user.id = update_user.id
+          // user.id = update_user.id
           user.name = update_user.name
+          user.collapse_to_id = update_user.collapse_to_id
         }
       })
     },
     saveEditUser(index){
+      let post_data = {}
       let user = this.viewUser[index];
       const new_name = this.$el.querySelector('#user_name_'+user.id).value
-      const new_id = this.$el.querySelector('#user_id_'+user.id).value
-      // console.log(new_name, new_id)
-      user.id = new_id
+      const new_collapse = this.$el.querySelector('#user_collapse_'+user.id).value
+      if(new_name != user.name) {
+        post_data.name = new_name
+      }
       user.name = new_name
+
+      if(new_collapse != user.collapse_to_id){
+        post_data.collapse_to_id = new_collapse
+      }
+      if(new_collapse != user.collapse_to_id){
+        if(new_collapse) {
+          user.collapse_to_id = new_collapse
+        } else {
+          user.collapse_to_id = 0
+        }
+        post_data.collapse_to_id = user.collapse_to_id
+      }
 
       this.isEditUser(index, false)
       this.saveGlobalUser(user)
+      this.postEditedUser(user.id, post_data)
     },
     isEditUser(index, status){
       this.viewUser[index].edit = status
       
       this.loadInfo = !this.loadInfo
-      // console.log(this.loadInfo)
-    },
-    postUpdateUser(){
-      let result = this.users.map(function(user){
-        return {
-          id: user.id,
-          name: user.name
-        }
-      })
-
-      // console.log(result)
-      return this.postUsers({people: result})
     },
     prevList(){
       // console.log('prevList')

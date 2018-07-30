@@ -2,6 +2,12 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f8f8f8;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+#app{
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 
@@ -9,30 +15,80 @@ body {
   background-color:#064355;
   width: 100%;
   height: 107px;
-  background-image: url(./images/logo.svg);
+  background-image: url(./../images/logo.svg);
   background-repeat:no-repeat;
   background-position: center;
 }
 .list-users {
-  /* display: inline-flex; */
   margin: 0 auto;
   padding-top: 20px;
-  text-align: center
+  text-align: center;
+  max-width: 1000px;
 }
 
 .item-user {
   display: inline-flex;
   margin-bottom: 20px;
   background-color: #fff;
-  border: 1px solid #aaa;
+  border: 1px solid #dcdcdc;
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   text-align: left;
-  padding: 10px 20px;
+  padding: 10px 10px 10px 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 15px;
+  line-height: 15px;
 }
+.item-user .text-name{
+  color: #6e6e6e
+}
+.item-user .text-value {
+  flex: 1 0 auto;
+  padding-right: 20px;
+}
+
+.item-user .input-edit{
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  padding: 5px 3px;
+  width: 100%;
+  text-indent: 5px;
+}
+
+.pt-1 {
+  padding-top: 3px;
+}
+.pl-1 {
+  padding-left: 3px;
+}
+.pr-1 {
+  padding-right: 3px;
+}
+
+.pl-2 {
+  padding-left: 7px;
+}
+.pr-2 {
+  padding-right: 7px;
+}
+
+.pt-2 {
+  padding-top: 7px;
+}
+
+.pt-4 {
+  padding-top: 20px;
+}
+
+
 .user-info {
   width: 300px;
   padding-left: 20px;
@@ -42,7 +98,8 @@ body {
   display: -ms-flexbox;
   display: flex;
   flex-flow: wrap;
-  width: 100px
+  justify-content: space-between;
+  width: 100px;
 }
 
 .cont-image .item-img{
@@ -55,19 +112,54 @@ body {
 }
 .cont-image .item-img:first-child {
   width: 100%;
+  margin-bottom: 8px;
 }
 .pagination {
   display: inline-flex;
-  margin: 0 auto
-}
-.pagination-prev {
-  margin-left: 5px;
+  margin: 0 auto;
+  color: #989495;
 }
 .pagination-item {
-  margin-left: 5px;
+  cursor: pointer;
 }
-.pagination-next {
-  margin-left: 5px;
+.pagination > div{
+  border: 1px solid #dcdcdc;
+  background-color: #ffffff;
+  margin-left: -1px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.08s ;
+  -webkit-transition: all 0.08s ;
+  -moz-transition: all 0.08s ;
+  -ms-transition: all 0.08s ;
+  -o-transition: all 0.08s ;
+}
+.pagination > div.disabled{
+  pointer-events: none;
+  color: #d8d8d8;
+}
+.pagination > div.active,
+.pagination > div:hover{
+  background: #bdbdbd;
+  color: #ffffff;
+  font-weight: bold;
+}
+.pagination > div.active {
+  pointer-events: none
+}
+.pagination > div:first-child {
+  border-radius: 3px 0 0 3px;
+  -webkit-border-radius: 3px 0 0 3px;
+  -moz-border-radius: 3px 0 0 3px;
+  -ms-border-radius: 3px 0 0 3px;
+  -o-border-radius: 3px 0 0 3px;
+}
+.pagination > div:last-child {
+  border-radius: 0px 3px 3px 0px;
+  -webkit-border-radius: 0px 3px 3px 0px;
+  -moz-border-radius: 0px 3px 3px 0px;
+  -ms-border-radius: 0px 3px 3px 0px;
+  -o-border-radius: 0px 3px 3px 0px;
 }
 
 .mx-auto {
@@ -81,9 +173,7 @@ body {
   text-align: center
 }
 
-.btn-edit-user{
 
-}
 .btn-edit-user .btn {
   width: 25px;
   height: 25px;
@@ -99,7 +189,7 @@ body {
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   position: relative;
 }
 .btn-edit-user .btn i {
@@ -135,4 +225,28 @@ body {
 .btn-edit-user .btn.btn-edit:hover {
   color: #fff;
   background-color: #ffc107;
+}
+
+.btn-global-save {
+  background-color: #28a745;
+  border: 1px solid #28a745;
+  color: #ffffff;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  margin-top: 20px;
+  padding: 7px 15px;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+.btn-global-save:hover {
+  background-color:#218838;
+  cursor: pointer;
+}
+button:focus {outline:0;}
+
+.d-flex {
+  display: flex
 }
