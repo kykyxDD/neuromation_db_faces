@@ -5,12 +5,12 @@
 		<title></title>
 		<meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+		<link rel="stylesheet" href="./css/fontawesome.css">
+		<!-- <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> -->
 		<link type="text/css" rel="stylesheet" href="./css/main.css">
 			
-		<script src="https://unpkg.com/vue"></script>
-		<script src="https://unpkg.com/vuex"></script>
+		<script src="./js/vue.js"></script>
+		<script src="./js/vuex.js"></script>
 		<!-- <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script> -->
 
 	</head>
@@ -26,14 +26,20 @@
 				Готово
 			</div>
 		</div>
-		<div class="text-center">
-			<div class="pagination"> 
-				<div @click="prevList()" class="pagination-prev" v-bind:class="{ disabled: itemPageUser == 0 }"><i class="fas fa-angle-left"></i> </div>
-				<div v-if="itemPageUser > 0" class="pagination-item" @click="itemList(itemPageUser-1)">{{itemPageUser}}</div>
-				<div class="pagination-item active">{{itemPageUser+1}}</div>
-				<div class="pagination-item " v-if="itemPageUser+1 < maxPageUser"  @click="itemList(itemPageUser+1)">{{itemPageUser+2}}</div>
-				<div @click="nextList()" class="pagination-next" v-bind:class="{ disabled: itemPageUser+1 == maxPageUser }"><i class="fas fa-angle-right"></i></div>
-			</div>
+		<div class="cont-load-fetch" v-bind:class="{ show: loadedResult || loadedPostResult }" >
+			<div class="load-fetch" ></div>
+		</div>
+		<div v-if="errorGetUsers" class="alert alert-danger get-users--error">
+			{{errorGetUsers}}
+		</div>
+		<div class="text-center" v-if="!errorGetUsers">
+		<!-- <div class="text-center"> -->
+			<paginate 
+				v-bind:item="itemPageUser"
+				v-bind:click-handler="clickNewPage"
+				v-bind:max-page-user="maxPageUser"
+				></paginate>
+			
 		</div>
     <div class="list-users">
       <div v-for="(user, index) in viewUser" :key="index" class="item-user">
@@ -61,7 +67,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="d-flex pt-2" v-if="user.collapse_to_id">
+					<div class="d-flex pt-2" >
 						<div class="pt-1 pr-2 text-name">Collapse <br> to id:</div>
 						<div class="text-value">
 							<div class="pt-2" v-if="!user.edit">
@@ -71,7 +77,26 @@
 								<input class="input-edit" type="number" step="1" :value="user.collapse_to_id" :id="'user_collapse_'+user.id">
 							</div>
 						</div>
-          </div>
+					</div>
+					<div class="d-flex pt-2" v-if="user.last_visit">
+						<div class="pt-1 pr-2 text-name">Last visit:</div>
+						<div class="text-value pt-1">
+							{{user.last_visit.d}}.{{user.last_visit.m}}.{{user.last_visit.y}} {{user.last_visit.h}}:{{user.last_visit.min}} 
+						</div>
+					</div>
+					<div class="d-flex pt-2" v-if="user.gender">
+						<div class="pt-1 pr-2 text-name">Gender:</div>
+						<div class="text-value pt-1">
+							{{user.gender}} 
+						</div>
+					</div>
+					<div class="d-flex pt-2" v-if="user.ages">
+							<div class="pt-1 pr-2 text-name">Ages:</div>
+							<div class="text-value pt-1">
+								<div v-for="age in user.ages">{{age[0] + '-'+ age[1]}}</div>
+								
+							</div>
+						</div>
 				</div>
 				<div class="btn-edit-user">
 					<div v-if="user.edit">
@@ -85,19 +110,22 @@
         
       </div>
 		</div>
-		<div class="text-center">
-			<div class="pagination"> 
-				<div @click="prevList()" class="pagination-prev" v-bind:class="{ disabled: itemPageUser == 0 }"><i class="fas fa-angle-left"></i> </div>
-				<div v-if="itemPageUser > 0" class="pagination-item" @click="itemList(itemPageUser-1)">{{itemPageUser}}</div>
-				<div class="pagination-item active">{{itemPageUser+1}}</div>
-				<div class="pagination-item " v-if="itemPageUser+1 < maxPageUser"  @click="itemList(itemPageUser+1)">{{itemPageUser+2}}</div>
-				<div @click="nextList()" class="pagination-next" v-bind:class="{ disabled: itemPageUser+1 == maxPageUser }"><i class="fas fa-angle-right"></i></div>
-			</div>
+		<div class="text-center" v-if="!errorGetUsers">
+			<paginate 
+				v-bind:item="itemPageUser"
+				v-bind:click-handler="clickNewPage"
+				v-bind:max-page-user="maxPageUser"
+				></paginate>
+		</div>
+
+		<div class="message-update-user" v-bind:class="{ show: showMessagePost, error: !messagePost && showMessagePost }">
+			<div class="close" @click="hideMessagePostUpdateUser()"><i class="fas fa-times-circle"></i></div>
+			{{ messagePost == true ? 'OK' : messagePost }}
 		</div>
 		
 
 	</div>
-
+	<script src="./js/vue_pagination.js"></script>
 	<script src="./js/vue_users.js"></script>
 	</body>
 </html>
