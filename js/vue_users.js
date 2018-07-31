@@ -189,7 +189,7 @@ const app = new Vue({
       } else if(genders[0] > genders[1]){
         return 'Man'
       } else {
-        return 'Woman'
+        return 'female'
       }
     },
     errorImage(e) {
