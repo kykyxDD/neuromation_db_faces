@@ -187,7 +187,7 @@ const app = new Vue({
       if(genders[0] == genders[1]) {
         return "Not definitely"
       } else if(genders[0] > genders[1]){
-        return 'Man'
+        return 'Male'
       } else {
         return 'female'
       }
