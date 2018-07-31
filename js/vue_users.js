@@ -1,5 +1,5 @@
-// const LINK_DB = "http://192.168.2.2:19877/face/list";
-const LINK_DB = "./list.json";
+const LINK_DB = "http://192.168.2.2:19877/face/list";
+// const LINK_DB = "./list.json";
 const LINK_POST_EDITED = "http://192.168.2.2:19877/face/set/";
 const LINK_GET_PHOTO = "http://192.168.2.2:9000/";
 
@@ -7,10 +7,11 @@ const app = new Vue({
 	el:'#app',
 	data() {
 		return {
+      loadPage: true,
       errorGetUsers: false,
       updateStatusUser: false,
       loadInfo: false,
-      loadedResult: false,
+      loadedGetResult: false,
       loadedPostResult: false,
       showMessagePost: false,
       messagePost: null,
@@ -20,16 +21,10 @@ const app = new Vue({
       paramsUrl: (new URL(document.location)).searchParams,
       itemPageUser: 1,
       maxPageUser: 1,
-			buy:0,
-			buyStock:null,
-			buyError:false,
-			sell:0,
-			sellStock:null,
-      sellError:false,
       lenId: 5,
-      maxLenImg: 3,
-      maxLenUser: 8,
-      defaultImg: './images/error.png',
+      maxLenImg: 3, // количество картинок, которые отображаются ниже большое фотки лица
+      maxLenUser: 8,  // количества людей на странице 
+      defaultImg: './images/no_photo.png',
       minAge: 0, 
       maxAge: 100
 		}
@@ -39,8 +34,15 @@ const app = new Vue({
     this.itemPageUser = pageUser
     this.getUsers(this.itemPageUser)
     const self = this;
+
+    this.$el.classList.remove('d-none');
     window.addEventListener("popstate", this.watchLocationPathname.bind(this), false)
-	},
+  },
+  computed: {
+    showMessageErrorPagination: function() {
+      return this.users.length && this.itemPageUser > 1 && this.itemPageUser > this.maxPageUser
+    }
+  },
 	methods:{
     getUsers(page) {
       let self = this
@@ -48,18 +50,20 @@ const app = new Vue({
       this.errorGetUsers = false
       let link = `${LINK_DB}?per_page=${this.maxLenUser}&page=${page}`
 
-      this.loadedResult = true
+      this.loadedGetResult = true
 
       fetch(link)
       .then(function(response) {
         return response.json();
       })
       .then(function(db_user) {
-        self.loadedResult = false
+        self.loadPage = false;
+        self.loadedGetResult = false
         self.parseData(db_user)
       })
       .catch( function(err) {
-        self.loadedResult = false
+        self.loadPage = false;
+        self.loadedGetResult = false
         self.errorGetUsers = err.message
       });
     },
@@ -230,18 +234,18 @@ const app = new Vue({
       }
       user.name = new_name
 
-      if(elem_collapse&& user.collapse_to_id){
-        if(new_collapse != user.collapse_to_id){
+
+      if(new_collapse != user.collapse_to_id){
+        if(new_collapse) {
+          user.collapse_to_id = new_collapse
           post_data.collapse_to_id = new_collapse
+        } else if(new_collapse == 0){
+          user.collapse_to_id = 0
+          post_data.collapse_to_id = new_collapse
+        } else {
+          post_data.collapse_to_id = 0
         }
-        if(new_collapse != user.collapse_to_id){
-          if(new_collapse) {
-            user.collapse_to_id = new_collapse
-          } else {
-            user.collapse_to_id = 0
-          }
-          post_data.collapse_to_id = user.collapse_to_id
-        }
+        
       }
 
       this.isEditUser(index, false)

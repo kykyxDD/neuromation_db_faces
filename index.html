@@ -16,7 +16,7 @@
 	</head>
 	<body>
 	<div class="header"></div>
-	<div id="app" v-cloak>
+	<div id="app" class="d-none">
 		
 		<div class="d-none">
 			<div v-if="loadInfo"> 
@@ -26,22 +26,45 @@
 				Готово
 			</div>
 		</div>
-		<div class="cont-load-fetch" v-bind:class="{ show: loadedResult || loadedPostResult }" >
+
+		<!-- Loader -->
+		<div class="cont-load-fetch" v-bind:class="{ show: loadedGetResult || loadedPostResult }" >
 			<div class="load-fetch" ></div>
 		</div>
+		<!-- Loader -->
+
+		<!-- ошибка при загрузке данных о лицах -->
 		<div v-if="errorGetUsers" class="alert alert-danger get-users--error">
 			{{errorGetUsers}}
 		</div>
-		<div class="text-center" v-if="!errorGetUsers">
-		<!-- <div class="text-center"> -->
+		<!-- ошибка при загрузке данных о лицах -->
+		
+		<!--  Пагинация (верхняя)-->
+		<div class="text-center" v-if="!errorGetUsers && !loadPage">
+
 			<paginate 
 				v-bind:item="itemPageUser"
 				v-bind:click-handler="clickNewPage"
 				v-bind:max-page-user="maxPageUser"
 				></paginate>
-			
+
 		</div>
-    <div class="list-users">
+		<!--  Пагинация (верхняя)-->
+
+		<!-- Список пуст. Зашли на страницу превышающие максимальное количество страниц -->
+		<div v-if="!loadPage && showMessageErrorPagination" class='text-center no-faces'>
+			<div class="alert alert-danger mx-auto">
+				Not found
+				<div v-if="maxPageUser > 0" @click="clickNewPage(1)" class="pt-2 text-underline cursor-pointer">
+					Go to the top of the list
+				</div>
+			</div>
+		</div>
+		<!-- Список пуст. Зашли на страницу превышающие максимальное количество страниц -->
+
+
+		<!-- Список лиц -->
+    <div v-if="viewUser.length" class="list-users">
       <div v-for="(user, index) in viewUser" :key="index" class="item-user">
  
         <div class="cont-image ">
@@ -110,18 +133,33 @@
         
       </div>
 		</div>
-		<div class="text-center" v-if="!errorGetUsers">
+		<!-- Список лиц -->
+
+		<!-- Список лиц пуст -->
+		<div v-if="!loadPage && !viewUser.length" class='text-center no-faces'>
+			<div class="alert alert-danger mx-auto">
+				Not found
+			</div>
+		</div>
+		<!-- Список лиц пуст -->
+
+		<!--  Пагинация (нижняя)-->
+		<div class="text-center" v-if="!errorGetUsers && !loadPage">
 			<paginate 
 				v-bind:item="itemPageUser"
 				v-bind:click-handler="clickNewPage"
 				v-bind:max-page-user="maxPageUser"
 				></paginate>
 		</div>
+		<!--  Пагинация (нижняя)-->
 
+
+		<!-- Сообщение об обновление данных о человеке -->
 		<div class="message-update-user" v-bind:class="{ show: showMessagePost, error: !messagePost && showMessagePost }">
 			<div class="close" @click="hideMessagePostUpdateUser()"><i class="fas fa-times-circle"></i></div>
 			{{ messagePost == true ? 'OK' : messagePost }}
 		</div>
+		<!-- Сообщение об обновление данных о человеке -->
 		
 
 	</div>

@@ -25,9 +25,17 @@ body {
   padding-top: 20px;
   text-align: center;
   max-width: 1000px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  justify-content: center;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 .item-user {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
   vertical-align: top;
   margin-bottom: 20px;
@@ -50,7 +58,9 @@ body {
   min-width: 70px;
 }
 .item-user .text-value {
-  flex: 1 0 auto;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 0 auto;
+          flex: 1 0 auto;
   padding-right: 20px;
 }
 
@@ -100,24 +110,52 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  flex-flow: wrap;
-  justify-content: space-between;
+  -ms-flex-flow: wrap;
+      flex-flow: wrap;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-line-pack: start;
+      align-content: flex-start;
   width: 100px;
 }
 
 .cont-image .item-img{
   width: 30%;
+  height: 30px;
+  border: 1px solid #dcdcdc;
+  border-radius: 3px;
+  overflow: hidden;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  position: relative;
 }
 .cont-image .item-img img{
   max-width: 100%;
+  max-height: 100%;
   margin: 0 auto;
   display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .cont-image .item-img:first-child {
   width: 100%;
-  margin-bottom: 8px;
+  height: 100px;
+  /* max-height: 100px; */
+  margin-bottom: 5px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
 }
 .pagination {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
   margin: 0 auto;
   color: #989495;
@@ -252,6 +290,8 @@ body {
 button:focus {outline:0;}
 
 .d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex
 }
 .get-users--error {
@@ -357,5 +397,22 @@ button:focus {outline:0;}
   position: absolute;
   top: 10px;
   right: 10px;
+  cursor: pointer;
+}
+
+.no-faces {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.no-faces .alert {
+  width: 200px;
+  margin: 0 auto;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.cursor-pointer {
   cursor: pointer;
 }
